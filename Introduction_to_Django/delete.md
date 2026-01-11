@@ -1,9 +1,4 @@
-Command:
 ```python
 book.delete()
-print(Book.objects.all())
-```
-Expected Output:
-```
-<QuerySet []>
+# Expected Output: (1, {'bookshelf.Book': 1})
 ```
