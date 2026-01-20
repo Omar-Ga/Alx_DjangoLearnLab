@@ -1,8 +1,9 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, override_settings
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from .models import Book, CustomUser
 
+@override_settings(SECURE_SSL_REDIRECT=False)
 class PermissionTests(TestCase):
     def setUp(self):
         # Create groups and permissions (similar to setup script)

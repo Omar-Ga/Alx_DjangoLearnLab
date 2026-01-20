@@ -31,6 +31,10 @@ Several security measures have been implemented to protect the application:
     - `SECURE_CONTENT_TYPE_NOSNIFF = True`: Prevents browser MIME-type sniffing.
     - `CSRF_COOKIE_SECURE = True`: Ensures CSRF cookies are only sent over HTTPS.
     - `SESSION_COOKIE_SECURE = True`: Ensures session cookies are only sent over HTTPS.
+    - `SECURE_SSL_REDIRECT = True`: Redirects all non-HTTPS traffic to HTTPS.
+    - `SECURE_HSTS_SECONDS = 31536000`: Enforces HTTP Strict Transport Security (HSTS) for 1 year.
+    - `SECURE_HSTS_INCLUDE_SUBDOMAINS = True`: Includes subdomains in HSTS policy.
+    - `SECURE_HSTS_PRELOAD = True`: Allows preloading of the site into browser HSTS lists.
 
 2.  **CSRF Protection**:
     - All forms in templates use the `{% csrf_token %}` tag.
@@ -41,3 +45,45 @@ Several security measures have been implemented to protect the application:
 
 4.  **Content Security Policy (CSP)**:
     - A custom middleware `LibraryProject.middleware.CSPMiddleware` sets the `Content-Security-Policy` header to strict defaults (`default-src 'self'; script-src 'self'; style-src 'self';`).
+
+## Deployment Configuration (HTTPS)
+To deploy this application securely with HTTPS, you typically use a web server like Nginx or Apache as a reverse proxy.
+
+### Nginx Configuration Example
+```nginx
+server {
+    listen 80;
+    server_name example.com www.example.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name example.com www.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+*Note: Obtain SSL certificates using a tool like Certbot (Let's Encrypt).*
+
+## Security Review
+The implemented security measures significantly reduce the risk of common web attacks:
+- **XSS**: Mitigated by `SECURE_BROWSER_XSS_FILTER` and `CSP`.
+- **CSRF**: Mitigated by Django's CSRF protection and `CSRF_COOKIE_SECURE`.
+- **Clickjacking**: Prevented by `X_FRAME_OPTIONS = 'DENY'`.
+- **Man-in-the-Middle (MITM)**: Prevented by enforcing HTTPS via `SECURE_SSL_REDIRECT` and HSTS settings.
+- **Data Integrity**: `SECURE_CONTENT_TYPE_NOSNIFF` ensures browsers interpret files correctly.
+
+Future improvements could include:
+- Implementing more granular CSP rules (e.g., specific image sources).
+- Regular dependency auditing.
+- Implementing rate limiting.
