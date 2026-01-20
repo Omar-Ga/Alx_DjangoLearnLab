@@ -20,9 +20,24 @@ Three groups are configured with specific permissions:
 
 ### Usage
 Permissions are enforced in `bookshelf/views.py` using the `@permission_required` decorator.
-Example:
-```python
-@permission_required('bookshelf.can_edit', raise_exception=True)
-def edit_book(request, pk):
-    ...
-```
+
+## Security Best Practices
+Several security measures have been implemented to protect the application:
+
+1.  **Secure Settings**:
+    - `DEBUG = False`: Disabled for production safety.
+    - `SECURE_BROWSER_XSS_FILTER = True`: Enables the browser's XSS filter.
+    - `X_FRAME_OPTIONS = 'DENY'`: Prevents clickjacking by denying framing.
+    - `SECURE_CONTENT_TYPE_NOSNIFF = True`: Prevents browser MIME-type sniffing.
+    - `CSRF_COOKIE_SECURE = True`: Ensures CSRF cookies are only sent over HTTPS.
+    - `SESSION_COOKIE_SECURE = True`: Ensures session cookies are only sent over HTTPS.
+
+2.  **CSRF Protection**:
+    - All forms in templates use the `{% csrf_token %}` tag.
+
+3.  **Secure Data Access**:
+    - Views use Django Forms (`ExampleForm`) to validate and sanitize user input.
+    - Django's ORM is used to prevent SQL injection.
+
+4.  **Content Security Policy (CSP)**:
+    - A custom middleware `LibraryProject.middleware.CSPMiddleware` sets the `Content-Security-Policy` header to strict defaults (`default-src 'self'; script-src 'self'; style-src 'self';`).
