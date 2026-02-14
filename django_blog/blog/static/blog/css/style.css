@@ -22,6 +22,19 @@ header nav a:hover {
     text-decoration: underline;
 }
 
+.search-bar {
+    margin-top: 10px;
+}
+
+.search-bar input {
+    padding: 5px;
+    width: 200px;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+}
+
 main {
     padding: 2rem;
 }

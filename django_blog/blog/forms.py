@@ -17,3 +17,10 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add a comment...'}),
         }
+
+class PostForm(forms.ModelForm):
+    tags = forms.CharField(required=False, help_text="Comma-separated tags")
+
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']

@@ -24,6 +24,12 @@
                 <a href="{% url 'register' %}">Register</a>
             {% endif %}
         </nav>
+        <div class="search-bar">
+            <form action="{% url 'search' %}" method="get">
+                <input type="text" name="q" placeholder="Search posts or tags...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
     </header>
     <main>
         {% block content %}
