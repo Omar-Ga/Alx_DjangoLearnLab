@@ -71,3 +71,22 @@ Use a hyphen (`-`) for descending order.
 
 **Example:**
 `GET /api/books/?ordering=-publication_year`
+
+## Testing
+
+The project includes a comprehensive suite of unit tests to ensure the API's integrity and correctness.
+
+### Testing Strategy
+- **CRUD Operations**: Verified that all endpoints (List, Detail, Create, Update, Delete) perform their intended actions correctly.
+- **Permissions**: Confirmed that `IsAuthenticatedOrReadOnly` and `IsAuthenticated` permissions are correctly enforced.
+- **Filtering, Searching, and Ordering**: Validated that query parameters for filtering, searching, and ordering produce the expected results.
+- **Data Validation**: (Via Serializers) Ensured that invalid data (e.g., future publication years) is rejected.
+
+### Running Tests
+To run the tests, execute the following command from the `advanced-api-project` directory:
+
+```bash
+python manage.py test api
+```
+
+The tests are located in `api/test_views.py`.

@@ -29,6 +29,7 @@ class BookAPITests(APITestCase):
     def test_list_books_unauthenticated(self):
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Should return a list of books even if not logged in (ReadOnly)
         self.assertEqual(len(response.data), 1)
 
     def test_detail_book_unauthenticated(self):
@@ -54,7 +55,19 @@ class BookAPITests(APITestCase):
             "author": self.author.id
         }
         response = self.client.post(self.create_url, data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN) # Or 401
+        # Should be forbidden for unauthenticated users
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_book_invalid_year(self):
+        self.client.login(username='testuser', password='password')
+        data = {
+            "title": "Future Book",
+            "publication_year": 2050,
+            "author": self.author.id
+        }
+        response = self.client.post(self.create_url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("Publication year cannot be in the future.", str(response.data))
 
     def test_update_book_authenticated(self):
         self.client.login(username='testuser', password='password')
@@ -75,6 +88,7 @@ class BookAPITests(APITestCase):
             "author": self.author.id
         }
         response = self.client.put(self.update_url, data)
+        # Should be forbidden for unauthenticated users
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_book_authenticated(self):
@@ -85,6 +99,7 @@ class BookAPITests(APITestCase):
 
     def test_delete_book_unauthenticated(self):
         response = self.client.delete(self.delete_url)
+        # Should be forbidden for unauthenticated users
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 class BookFilterTests(APITestCase):
@@ -152,8 +167,7 @@ class BookFilterTests(APITestCase):
     def test_ordering_by_publication_year(self):
         response = self.client.get(self.list_url, {'ordering': 'publication_year'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # 2020 comes before 2021. Since 2 books have 2020, order between them is not guaranteed unless secondary sort exists.
-        # But both should be before 2021.
+        # 2020 comes before 2021.
         self.assertEqual(response.data[0]['publication_year'], 2020)
         self.assertEqual(response.data[1]['publication_year'], 2020)
         self.assertEqual(response.data[2]['publication_year'], 2021)
