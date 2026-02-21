@@ -39,8 +39,8 @@ class UserAuthTests(APITestCase):
 
     def test_follow_unfollow(self):
         self.client.force_authenticate(user=self.user)
-        follow_url = reverse('follow-user', kwargs={'user_id': self.other_user.pk})
-        unfollow_url = reverse('unfollow-user', kwargs={'user_id': self.other_user.pk})
+        follow_url = reverse('follow_user', kwargs={'user_id': self.other_user.pk})
+        unfollow_url = reverse('unfollow_user', kwargs={'user_id': self.other_user.pk})
 
         # Follow
         response = self.client.post(follow_url)
@@ -59,7 +59,7 @@ class UserAuthTests(APITestCase):
         Post.objects.create(author=self.other_user, title='User 2 Post', content='Hello')
         
         self.client.force_authenticate(user=self.user)
-        feed_url = reverse('feed')
+        feed_url = reverse('post_feed')
         response = self.client.get(feed_url)
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
