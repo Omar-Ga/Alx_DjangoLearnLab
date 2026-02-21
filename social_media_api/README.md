@@ -102,3 +102,14 @@ Posts can be searched using the `search` query parameter:
 ### Feed
 
 -   `GET /api/feed/`: Retrieve a feed of posts from followed users (paginated).
+
+## Likes and Notifications
+
+### Likes
+
+-   `POST /api/posts/{id}/like/`: Like a post.
+-   `POST /api/posts/{id}/unlike/`: Unlike a post.
+
+### Notifications
+
+-   `GET /api/notifications/`: Fetch your notifications (paginated).
