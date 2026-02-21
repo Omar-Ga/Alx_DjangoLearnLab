@@ -113,3 +113,31 @@ Posts can be searched using the `search` query parameter:
 ### Notifications
 
 -   `GET /api/notifications/`: Fetch your notifications (paginated).
+
+## Deployment
+
+This project is configured for deployment to platforms like Heroku, Render, or any VPS with Gunicorn.
+
+### Steps to Deploy
+
+1.  **Set Environment Variables:**
+    -   `SECRET_KEY`: A strong unique key.
+    -   `DEBUG`: `False` for production.
+    -   `ALLOWED_HOSTS`: List of domains.
+    -   `DATABASE_URL`: Connection string for your production database.
+    -   `SECURE_SSL_REDIRECT`: `True` to force HTTPS.
+
+2.  **Static Files:**
+    The project uses `WhiteNoise` to serve static files. Run `python manage.py collectstatic` during deployment.
+
+3.  **Database:**
+    Run migrations on the production server:
+    ```bash
+    python manage.py migrate
+    ```
+
+4.  **Web Server:**
+    The project uses `Gunicorn`. The `Procfile` is included for process management.
+
+### Live URL
+(Example: https://social-media-api-django.herokuapp.com/)
