@@ -64,3 +64,30 @@ Returns the authentication token.
 `Authorization: Token <your_token>`
 **Response:**
 Returns the authenticated user's profile data.
+
+## Posts and Comments
+
+All endpoints are at `/api/posts/` and `/api/comments/`.
+
+### Posts
+
+-   `GET /api/posts/`: List posts (paginated, searchable by `title` and `content`).
+-   `POST /api/posts/`: Create a post.
+-   `GET /api/posts/{id}/`: Retrieve a post.
+-   `PUT /api/posts/{id}/`: Update a post (author only).
+-   `PATCH /api/posts/{id}/`: Partially update a post (author only).
+-   `DELETE /api/posts/{id}/`: Delete a post (author only).
+
+### Comments
+
+-   `GET /api/comments/`: List comments.
+-   `POST /api/comments/`: Create a comment.
+-   `GET /api/comments/{id}/`: Retrieve a comment.
+-   `PUT /api/comments/{id}/`: Update a comment (author only).
+-   `PATCH /api/comments/{id}/`: Partially update a comment (author only).
+-   `DELETE /api/comments/{id}/`: Delete a comment (author only).
+
+## Filtering
+
+Posts can be searched using the `search` query parameter:
+-   `GET /api/posts/?search=keyword`
