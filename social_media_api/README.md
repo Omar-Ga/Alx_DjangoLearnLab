@@ -91,3 +91,14 @@ All endpoints are at `/api/posts/` and `/api/comments/`.
 
 Posts can be searched using the `search` query parameter:
 -   `GET /api/posts/?search=keyword`
+
+## Follows and Feed
+
+### Follow/Unfollow
+
+-   `POST /api/follow/{user_id}/`: Follow a user.
+-   `POST /api/unfollow/{user_id}/`: Unfollow a user.
+
+### Feed
+
+-   `GET /api/feed/`: Retrieve a feed of posts from followed users (paginated).
