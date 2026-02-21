@@ -1,1 +1,1 @@
-web: gunicorn social_media_api.wsgi
+web: python manage.py collectstatic --no-input && python manage.py migrate && gunicorn social_media_api.wsgi
